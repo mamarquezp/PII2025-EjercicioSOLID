@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PII2025_EjercicioSOLID.Interfaces;
 using PII2025_EjercicioSOLID.Models;
 
 namespace PII2025_EjercicioSOLID.SOLID_Services
 {
-    internal class CardPayment: PaymentBase
+    internal class CardPayment: IPaymentProcessor
     {
-        public override bool Pay(decimal amount)
+        public bool ProcessPayment(decimal amount)
         {
-            Console.WriteLine($"[CARD] Cobrado {amount:C}");
+            Console.WriteLine($"Cobrado con tarjeta {amount:C}");
             return true;
         }
     }

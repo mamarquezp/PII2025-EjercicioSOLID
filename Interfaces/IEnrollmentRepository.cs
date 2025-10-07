@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace PII2025_EjercicioSOLID.Interfaces
 {
-    public interface IPriceDiscount
+    public interface IEnrollmentRepository
     {
-        decimal CalculatePrice(decimal basePrice);
+        void Save(string id, string studentId, string courseId, decimal finalPrice);
+        IEnumerable<string> GetAll();
     }
 }

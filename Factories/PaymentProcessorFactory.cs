@@ -24,7 +24,7 @@ namespace PII2025_EjercicioSOLID.Factories
         public IPaymentProcessor GetProcessor(string paymentType)
         {
             // Si el tipo de pago no se encuentra, devuelve efectivo por defecto.
-            return _processors.ContainsKey(paymentType) ? processors[paymentType] : processors["cash"];
+            return processors.ContainsKey(paymentType) ? processors[paymentType] : processors["cash"];
         }
     }
 }

@@ -15,18 +15,18 @@ namespace PII2025_EjercicioSOLID
         private readonly IStudentRepository studentRepo;
         private readonly ICourseRepository courseRepo;
         private readonly IEnrollmentRepository enrollmentRepository;
-        private readonly PaymentProcessorFactory paymentProcessor;
-        private readonly IPriceDiscount priceDiscount;
+        private readonly PricingStrategyFactory priceDiscount;
         private readonly INotificationService notifier;
+        private readonly PaymentProcessorFactory paymentProcessor;
 
-            public EnrollmentManager(IStudentRepository sr, ICourseRepository cr, IEnrollmentRepository er, IPriceDiscount pd, INotificationService n, PaymentProcessorFactory pp)
+        public EnrollmentManager(IStudentRepository sr, ICourseRepository cr, IEnrollmentRepository er, IPriceDiscount pd, INotificationService n, PaymentProcessorFactory pp)
             {
                 studentRepo = sr;
                 courseRepo = cr;
                 enrollmentRepository = er;
                 priceDiscount = pd;
-                paymentProcessor = pp;
                 notifier = n;
+                paymentProcessor = pp;
             }
 
         public void EnrollAndPay(string studentId, string courseId, string promo, string paymentType)
@@ -46,7 +46,7 @@ namespace PII2025_EjercicioSOLID
                 decimal finalPrice = pricingStrategy.CalculatePrice(course.BasePrice);
 
                 var paymentProcess = paymentProcessor.GetProcessor(paymentType);
-                bool paymentOk = paymentProcess.ProcessPayment(finalPrice);
+                bool paymentOk = paymentProcess.Payment(finalPrice);
 
                 if (!paymentOk)
                 {

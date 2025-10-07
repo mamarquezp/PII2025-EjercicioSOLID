@@ -10,7 +10,7 @@ namespace PII2025_EjercicioSOLID.Class
 {
     internal class StandarPrice : IPriceDiscount
     {
-        public override decimal CalculatePrice(decimal basePrice)
+        public decimal CalculatePrice(decimal basePrice)
         {
             var finalPrice = basePrice;
             return finalPrice;
