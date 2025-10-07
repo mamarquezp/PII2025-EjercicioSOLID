@@ -7,11 +7,17 @@ using System.Threading.Tasks;
 
 namespace PII2025_EjercicioSOLID.Data
 {
-    internal class FileEnrollment
-    {
-        public static List<Student> LstStudents = new List<Student>();
-        public static List<Course> LstCourses = new List<Course>();
-        public static List<(string id, string studentId, string courseId, decimal price, bool paid)> LstEnrollments = new();
+    //    public class FileEnrollment
+    //    {
+    //        private readonly List<Student> LstStudents = new List<Student>();
+    //        public Student GetById(string studentID)
+    //        {
+    //            return LstStudents.FirstOrDefault(s => s.Id == studentID);
+    //        }
 
-    }
+    //        public static List<Course> LstCourses = new List<Course>();
+    //        public static List<(string id, string studentId, string courseId, decimal price, bool paid)> LstEnrollments = new();
+
+    //    }
+    //}
 }

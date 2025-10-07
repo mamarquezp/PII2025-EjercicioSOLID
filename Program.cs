@@ -2,22 +2,33 @@
 
 using PII2025_EjercicioSOLID;
 using PII2025_EjercicioSOLID.Class;
+using PII2025_EjercicioSOLID.Data;
+using PII2025_EjercicioSOLID.Factories;
+using PII2025_EjercicioSOLID.Interfaces;
 using PII2025_EjercicioSOLID.SOLID_Services;
 
-internal class Program
-{
-    private static void Main(string[] args)
-    {
-        var app = new EnrollmentManager();
-        Students st = new Students();
-        Courses cs = new Courses();
-        Enrollments en = new Enrollments();
+IStudentRepository studentRepository = new InMemoryStudentRepository();
+ICourseRepository courseRepository = new InMemoryCourseRepository();
+IEnrollmentRepository enrollmentRepository = new FileEnrollmentRepository("db/enrollments.csv");
 
-        CreateDB cdb = new CreateDB();
-        cdb.Create("DB_Simulada");
+INotificationService notificationService = new ConsoleNotificationService();
 
-        CargarDatos cd = new CargarDatos();
-        cd.Seed();
+var pricingFactory = new PricingStrategyFactory();
+var paymentFactory = new PaymentProcessorFactory();
+
+var enrollmentManager = new EnrollmentManager(
+    studentRepository,
+    courseRepository,
+    enrollmentRepository,
+    notificationService, 
+    pricingFactory,
+    paymentFactory
+);
+
+//DataSeeder.Seed(courseRepository);
+
+CargarDatos cd = new CargarDatos();
+cd.Seed();
 
 
 
@@ -55,7 +66,7 @@ internal class Program
                     var promo = Console.ReadLine();
                     Console.Write("Pago (card/cash/transfer/crypto): ");
                     var pay = Console.ReadLine();
-                    en.EnrollAndPay(sid, cid, promo, pay);
+                    enrollmentManager.EnrollAndPay(sid, cid, promo, pay);
                     break;
                 case "4":
                     en.ListEnrollments();

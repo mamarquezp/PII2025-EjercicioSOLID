@@ -9,7 +9,7 @@ namespace PII2025_EjercicioSOLID.Interfaces
 {
     public interface IStudentRepository
     {
-        Student GetByID(string studentId);
+        Student GetById(string studentId);
         void Save(Student student);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PII2025_EjercicioSOLID.SOLID_Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace PII2025_EjercicioSOLID.Interfaces
 {
     public interface IPaymentProcessor
     {
-        bool Payment(decimal  amount);
+        bool Payment(decimal amount);
     }
 }

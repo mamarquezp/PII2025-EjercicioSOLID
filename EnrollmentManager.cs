@@ -4,30 +4,66 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PII2025_EjercicioSOLID.Interfaces;
+using PII2025_EjercicioSOLID.Factories;
 
 namespace PII2025_EjercicioSOLID
 {
 	public class EnrollmentManager
 
 	{
-            private readonly IStudentRepository studentRepo;
-            private readonly ICourseRepository courseRepo;
-            private readonly IPaymentProcessor paymentProcessor;
-            private readonly INotificationService notifier;
+        private readonly IStudentRepository studentRepo;
+        private readonly ICourseRepository courseRepo;
+        private readonly IEnrollmentRepository enrollmentRepository;
+        private readonly PaymentProcessorFactory paymentProcessor;
+        private readonly IPriceDiscount priceDiscount;
+        private readonly INotificationService notifier;
 
-            public EnrollmentManager(IStudentRepository sr, ICourseRepository cr, IPaymentProcessor pp, INotificationService n)
+            public EnrollmentManager(IStudentRepository sr, ICourseRepository cr, IEnrollmentRepository er, IPriceDiscount pd, INotificationService n, PaymentProcessorFactory pp)
             {
                 studentRepo = sr;
                 courseRepo = cr;
+                enrollmentRepository = er;
+                priceDiscount = pd;
                 paymentProcessor = pp;
                 notifier = n;
             }
 
-            public void EnrollStudent(...)
+        public void EnrollAndPay(string studentId, string courseId, string promo, string paymentType)
+        {
+            try
             {
-                var student = studentRepo.GetById(...);
-                paymentProcessor.ProcessPayment(...);
-                notifier.SendConfirmation(...);
+                var student = studentRepo.GetById(studentId);
+                var course = courseRepo.GetById(courseId);
+
+                if (student == null || course == null)
+                {
+                    Console.WriteLine("Estudiante o curso no encontrado.");
+                    return;
+                }
+
+                var pricingStrategy = priceDiscount.GetStrategy(promo);
+                decimal finalPrice = pricingStrategy.CalculatePrice(course.BasePrice);
+
+                var paymentProcess = paymentProcessor.GetProcessor(paymentType);
+                bool paymentOk = paymentProcess.ProcessPayment(finalPrice);
+
+                if (!paymentOk)
+                {
+                    Console.WriteLine("Pago rechazado.");
+                    return;
+                }
+
+                var enrollmentId = Guid.NewGuid().ToString("N");
+                enrollmentRepository.Save(enrollmentId, student.Id, course.Id, finalPrice);
+
+                notifier.SendEnrollmentConfirmation(student, course, finalPrice);
+
+                Console.WriteLine("Operación completada con éxito.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ocurrió un error: " + ex.Message);
             }
         }
 
