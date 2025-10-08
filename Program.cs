@@ -102,6 +102,12 @@ while (true)
                         break;
                     case "4":
                         Console.WriteLine("Historial de Inscripciones");
+                        var enrollments = enrollmentRepository.GetAll();
+                        if (!enrollments.Any())
+                        {
+                            Console.WriteLine("No hay inscripciones registradas.");
+                            break;
+                        }
                         foreach (var e in enrollmentRepository.GetAll())
                             Console.WriteLine(e);
                         break;

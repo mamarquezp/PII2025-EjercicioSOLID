@@ -9,25 +9,25 @@ using PII2025_EjercicioSOLID.Factories;
 
 namespace PII2025_EjercicioSOLID
 {
-	public class EnrollmentManager
-
-	{
+    public class EnrollmentManager
+    {
         private readonly IStudentRepository studentRepo;
         private readonly ICourseRepository courseRepo;
         private readonly IEnrollmentRepository enrollmentRepository;
         private readonly PricingStrategyFactory priceDiscount;
         private readonly INotificationService notifier;
         private readonly PaymentProcessorFactory paymentProcessor;
+        private int siguienteCorrelativo = 1;
 
-        public EnrollmentManager(IStudentRepository sr, ICourseRepository cr, IEnrollmentRepository er, IPriceDiscount pd, INotificationService n, PaymentProcessorFactory pp)
-            {
-                studentRepo = sr;
-                courseRepo = cr;
-                enrollmentRepository = er;
-                priceDiscount = pd;
-                notifier = n;
-                paymentProcessor = pp;
-            }
+        public EnrollmentManager(IStudentRepository sr, ICourseRepository cr, IEnrollmentRepository er, PricingStrategyFactory pd, INotificationService n, PaymentProcessorFactory pp)
+        {
+            studentRepo = sr;
+            courseRepo = cr;
+            enrollmentRepository = er;
+            priceDiscount = pd;
+            notifier = n;
+            paymentProcessor = pp;
+        }
 
         public void EnrollAndPay(string studentId, string courseId, string promo, string paymentType)
         {
@@ -46,7 +46,7 @@ namespace PII2025_EjercicioSOLID
                 decimal finalPrice = pricingStrategy.CalculatePrice(course.BasePrice);
 
                 var paymentProcess = paymentProcessor.GetProcessor(paymentType);
-                bool paymentOk = paymentProcess.Payment(finalPrice);
+                bool paymentOk = paymentProcess.ProcessPayment(finalPrice);
 
                 if (!paymentOk)
                 {
@@ -54,8 +54,10 @@ namespace PII2025_EjercicioSOLID
                     return;
                 }
 
-                var enrollmentId = Guid.NewGuid().ToString("N");
-                enrollmentRepository.Save(enrollmentId, student.Id, course.Id, finalPrice);
+                
+                var enrollmentId = siguienteCorrelativo.ToString();
+                siguienteCorrelativo++;
+                enrollmentRepository.Save(enrollmentId, student.Name, course.Name, finalPrice); // Cambio de ID por nombre en curso y estudiante
 
                 notifier.SendEnrollmentConfirmation(student, course, finalPrice);
 
@@ -66,6 +68,8 @@ namespace PII2025_EjercicioSOLID
                 Console.WriteLine("Ocurrió un error: " + ex.Message);
             }
         }
+    }
+}
 
         //public static List<Student> Students = new List<Student>();
         //public static List<Course> Courses = new List<Course>();
@@ -152,4 +156,4 @@ namespace PII2025_EjercicioSOLID
         //	foreach (var e in Enrollments)
         //		Console.WriteLine($"{e.id} - S:{e.studentId} C:{e.courseId} Precio:{e.price:C} Pagado:{e.paid}");
         //}
-}
+

@@ -9,6 +9,6 @@ namespace PII2025_EjercicioSOLID.Interfaces
 {
     public interface IPaymentProcessor
     {
-        bool Payment(decimal amount);
+        bool ProcessPayment(decimal amount);
     }
 }

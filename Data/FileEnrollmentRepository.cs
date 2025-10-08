@@ -27,5 +27,4 @@ namespace PII2025_EjercicioSOLID.Data
             File.AppendAllLines(_filePath, new[] { line });
         }
     }
-     }
 }

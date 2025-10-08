@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace PII2025_EjercicioSOLID.Interfaces
 {
-    internal abstract class INotifierFat
-    {
-        public abstract void SendNotification(string to, string subject, string message);
-    }
+    //internal abstract class INotifierFat
+    //{
+    //    public abstract void SendNotification(string to, string subject, string message);
+    //}
 }

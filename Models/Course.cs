@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PII2025_EjercicioSOLID.Models
 {
-    internal class Course
+    public class Course
     {
         public string Id;
         public string Name;

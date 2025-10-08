@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PII2025_EjercicioSOLID.Class
+namespace PII2025_EjercicioSOLID.SOLID_Services
 {
     internal class StandarPrice : IPriceDiscount
     {
